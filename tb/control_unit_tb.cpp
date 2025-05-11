@@ -2,16 +2,15 @@
 #include "control_unit.h"
 
 int sc_main(int argc, char* argv[]) {
-    // Clock
     sc_clock clock("clock", 10, SC_NS);
 
-    // Input signals
+    // Inputs
     sc_signal<sc_uint<4>> opcode;
     sc_signal<sc_uint<8>> src1, src2;
     sc_signal<sc_uint<9>> dest;
     sc_signal<bool> flagN, flagZ;
 
-    // Output signals
+    // Outputs
     sc_signal<bool> enablePC, loadPC, resetPC;
     sc_signal<sc_uint<9>> jumpAddress;
     sc_signal<bool> enableIM, writeIM;
@@ -24,7 +23,6 @@ int sc_main(int argc, char* argv[]) {
     sc_signal<bool> resetFlags;
     sc_signal<sc_uint<2>> muxRegWrite, muxDMAddr;
 
-    // Instantiate Control Unit
     ControlUnit cu("ControlUnit");
     cu.clock(clock);
     cu.opcode(opcode);
@@ -56,7 +54,7 @@ int sc_main(int argc, char* argv[]) {
 
     std::cout << "Running ControlUnit testbench..." << std::endl;
 
-    // Initialize inputs
+    // Init
     opcode.write(0);
     src1.write(0);
     src2.write(0);
@@ -64,19 +62,17 @@ int sc_main(int argc, char* argv[]) {
     flagN.write(false);
     flagZ.write(false);
 
-    // Initial states: Fetch
-    sc_start(10, SC_NS); // State 0 -> 1
-    sc_start(10, SC_NS); // State 1 -> 2
+    sc_start(20, SC_NS); // Start pipeline
 
-    // === LRI ===
+    // LRI
     opcode.write(13);
     src1.write(0xAB);
     dest.write(0x12);
-    sc_start(40, SC_NS); // to reach state 9
+    sc_start(40, SC_NS);
     std::cout << "[LRI] immediateDest = " << immediateDest.read()
               << ", immediateValue = " << immediateValue.read() << std::endl;
 
-    // === LD ===
+    // LD
     opcode.write(8);
     src1.write(0x00);
     dest.write(0x55);
@@ -85,7 +81,7 @@ int sc_main(int argc, char* argv[]) {
               << ", writeDM = " << writeDM.read()
               << ", muxRegWrite = " << muxRegWrite.read() << std::endl;
 
-    // === ST ===
+    // ST
     opcode.write(9);
     dest.write(0x22);
     sc_start(40, SC_NS);
@@ -93,39 +89,39 @@ int sc_main(int argc, char* argv[]) {
               << ", writeDM = " << writeDM.read()
               << ", muxDMAddr = " << muxDMAddr.read() << std::endl;
 
-    // === JUMP ===
+    // JUMP
     opcode.write(10);
     dest.write(0x1FF);
     sc_start(40, SC_NS);
     std::cout << "[JUMP] jumpAddress = " << jumpAddress.read()
               << ", loadPC = " << loadPC.read() << std::endl;
 
-    // === JN === (flagN true)
-    opcode.write(11);
+    // JN
     flagN.write(true);
-    dest.write(0x111);
+    sc_start(10, SC_NS);
+    opcode.write(11);
+    dest.write(0x1FF);
     sc_start(40, SC_NS);
     std::cout << "[JN] jumpAddress = " << jumpAddress.read()
               << ", loadPC = " << loadPC.read()
               << ", resetFlags = " << resetFlags.read() << std::endl;
-    flagN.write(false); // reset
+    flagN.write(false);
 
-    // === JZ === (flagZ true)
-    opcode.write(12);
+    // JZ
     flagZ.write(true);
-    dest.write(0x222);
+    sc_start(10, SC_NS);
+    opcode.write(12);
+    dest.write(0x22);
     sc_start(40, SC_NS);
     std::cout << "[JZ] jumpAddress = " << jumpAddress.read()
               << ", loadPC = " << loadPC.read()
               << ", resetFlags = " << resetFlags.read() << std::endl;
-    flagZ.write(false); // reset
+    flagZ.write(false);
 
-    // === HALT ===
+    // HALT
     opcode.write(0);
-    sc_start(10, SC_NS); // HALT (sc_stop triggered)
+    sc_start(10, SC_NS);
 
     std::cout << "ControlUnit testbench completed." << std::endl;
     return 0;
 }
-
-// os resultados do testbench não estão certos!! 
