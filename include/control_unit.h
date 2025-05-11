@@ -13,19 +13,20 @@ public:
     sc_in<bool>     flagN, flagZ;
 
     // Outputs
-    sc_out<bool>        enablePC, loadPC, resetPC;
-    sc_out<sc_uint<9>>  jumpAddress;
-    sc_out<bool>        enableIM, writeIM;
-    sc_out<bool>        enableDM, writeDM;
-    sc_out<bool>        enableIR, writeIR;
-    sc_out<sc_uint<8>>  immediateValue;
-    sc_out<sc_uint<9>>  immediateDest;
-    sc_out<bool>        enableRB, writeRB;
-    sc_out<bool>        enablePipeReg, writePipeReg, resetPipeReg;
-    sc_out<bool>        resetFlags;
-    sc_out<sc_uint<2>>  muxRegWrite, muxDMAddr;
+    sc_out<bool>        enablePC{"enablePC"}, loadPC{"loadPC"}, resetPC{"resetPC"};
+    sc_out<sc_uint<9>>  jumpAddress{"jumpAddress"};
+    sc_out<bool>        enableIM{"enableIM"}, writeIM{"writeIM"};
+    sc_out<bool>        enableDM{"enableDM"}, writeDM{"writeDM"};
+    sc_out<bool>        enableIR{"enableIR"}, writeIR{"writeIR"};
+    sc_out<sc_uint<8>>  immediateValue{"immediateValue"};
+    sc_out<sc_uint<9>>  immediateDest{"immediateDest"};
+    sc_out<bool>        enableRB{"enableRB"}, writeRB{"writeRB"};
+    sc_out<bool>        enablePipeReg{"enablePipeReg"}, writePipeReg{"writePipeReg"}, resetPipeReg{"resetPipeReg"};
+    sc_out<bool>        resetFlags{"resetFlags"};
+    sc_out<sc_uint<2>>  muxRegWrite{"muxRegWrite"}, muxDMAddr{"muxDMAddr"};
 
     SC_CTOR(ControlUnit) {
+        std::cout << "New component - CU" << std::endl;
         SC_METHOD(stateMachine);
         sensitive << clock.pos();
     }
@@ -55,6 +56,7 @@ private:
 
     void stopIR(){
         enableIR.write(0);
+        writeIR.write(0);
     }
 
     void stateMachine(){

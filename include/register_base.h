@@ -24,6 +24,7 @@ SC_MODULE(RegisterBase) {
     void print(int count);
 
     SC_CTOR(RegisterBase) {
+        std::cout << "New component - Register Base" << std::endl;
         regdata = new sc_signal<TData>[TSize];
         SC_METHOD(process);
         sensitive << clock.pos();

@@ -6,16 +6,14 @@
  
 SC_MODULE(Mux3x1) {
     // Ports
-    sc_in<sc_uint<2>> selector;        // Selects input
-    sc_in<sc_int<32>> aluResult;       // Input from ALU
-    sc_in<sc_int<32>> dataMemory;      // Input from Data Memory
-    sc_in<sc_uint<8>> immediateValue;  // Immediate value
-    sc_out<sc_int<32>> output;         // Output
+    sc_in<sc_uint<2>> selector{"selector"};      
+    sc_in<sc_int<32>> aluResult{"aluResult"};      
+    sc_in<sc_int<32>> dataMemory{"dataMemory"};     
+    sc_in<sc_uint<8>> immediateValue{"immediateValue"};  
+    sc_out<sc_int<32>> output{"output"};        
 
-    // Multiplexing behavior
     void do_select();
 
-    // Constructor
     SC_CTOR(Mux3x1) {
         std::cout << "New component - Mux3x1" << std::endl;
         SC_METHOD(do_select);
@@ -35,7 +33,7 @@ void Mux3x1::do_select() {
             output.write((sc_int<32>) immediateValue.read());
             break;
         default:
-            output.write(0); // Default fallback
+            output.write(0); 
     }
 }
 

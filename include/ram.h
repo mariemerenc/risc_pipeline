@@ -7,12 +7,12 @@
 
 template<typename TData = sc_uint<32>, int TSize = 256>
 SC_MODULE(RAM) {
-    sc_in<bool> clock;
-    sc_in<bool> enable;
-    sc_in<bool> write;
-    sc_in<sc_uint<9>> address;
-    sc_in<TData> dataIn;
-    sc_out<TData> dataOut;
+    sc_in<bool> clock{"clock"};
+    sc_in<bool> enable{"enable"};
+    sc_in<bool> write{"write"};
+    sc_in<sc_uint<9>> address{"address"};
+    sc_in<TData> dataIn{"dataIn"};
+    sc_out<TData> dataOut{"dataOut"};
 
     sc_signal<TData> *memory;
 
@@ -24,6 +24,7 @@ SC_MODULE(RAM) {
     void print(int count);
 
     SC_CTOR(RAM) {
+        std::cout << "New component - RAM" << std::endl;
         moduleName = name();
         memory = new sc_signal<TData>[TSize];
 
