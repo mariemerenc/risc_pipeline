@@ -3,7 +3,14 @@
 void PipelineReg::process() {
     while (true) {
         wait();
-        if (enable.read() && write.read()) {
+
+        if (reset.read()) { 
+            _opcode = 0;
+            _of1 = 0;
+            _of2 = 0;
+            _od = 0;
+        } 
+        else if (enable.read() && write.read()) {
             _opcode = opcodeIn.read();
             _of1 = of1In.read();
             _of2 = of2In.read();
