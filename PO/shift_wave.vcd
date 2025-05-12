@@ -1,0 +1,44 @@
+$date
+     May 12, 2025       19:00:15
+$end
+
+$version
+ SystemC 2.3.3-Accellera --- May 10 2025 16:26:38
+$end
+
+$timescale
+     1 ps
+$end
+
+$scope module SystemC $end
+$var wire   32  aaaaa  in [31:0]  $end
+$var wire    5  aaaab  shift_amount [4:0]  $end
+$var wire    1  aaaac  shift_dir       $end
+$var wire   32  aaaad  out [31:0]  $end
+$upscope $end
+$enddefinitions  $end
+
+$comment
+All initial values are dumped below at time 0 sec = 0 timescale units.
+$end
+
+$dumpvars
+b1 aaaaa
+b10 aaaab
+0aaaac
+b100 aaaad
+$end
+
+#1000
+b1000 aaaaa
+b11 aaaab
+1aaaac
+b1 aaaad
+
+#2000
+b11110000000000000000000000000000 aaaaa
+b0 aaaab
+0aaaac
+b11110000000000000000000000000000 aaaad
+
+#3000
