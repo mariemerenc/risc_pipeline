@@ -1,41 +1,37 @@
 #ifndef PROGRAM_COUNTER_H
 #define PROGRAM_COUNTER_H
 
-#include "systemc.h"
+#include <systemc.h>
 
- 
 SC_MODULE(ProgramCounter) {
-    // Port declarations
-    sc_in_clk clock;                   // Clock input
-    sc_in<bool> reset;                 // Reset signal
-    sc_in<bool> enable;                // Enable increment
-    sc_in<bool> load;                  // Load new value
-    sc_in<sc_uint<9>> counterIn;       // Value to load
-    sc_out<sc_uint<9>> counterOut;     // Current PC value
+    sc_in_clk clock{"clock"};                      
+    sc_in<bool> reset{"reset"};                    
+    sc_in<bool> load{"load"};                     
+    sc_in<bool> enable{"enable"};                  
 
-    // Internal counter register
-    sc_uint<9> count = 0;
+    sc_in<sc_uint<8>> pc_in{"pc_in"};            
+    sc_out<sc_uint<8>> pc_out{"pc_out"};            
 
-    // Process logic
-    void updateCounter();
+    sc_uint<8> pc_reg;
 
-    // Constructor
-    SC_CTOR(ProgramCounter) {
+    void update_pc(){
+        if(reset.read()){
+            pc_reg = 0;
+        }
+        else if(load.read()){
+            pc_reg = pc_in.read();
+        }
+        else if(enable.read()){
+            pc_reg = pc_reg + 1;
+        }
+        pc_out.write(pc_reg);
+    }
+
+    SC_CTOR(ProgramCounter){
         std::cout << "New component - Program Counter" << std::endl;
-        SC_METHOD(updateCounter);
-        sensitive << reset << clock.pos();
+        SC_METHOD(update_pc);
+        sensitive << clock.pos();
     }
 };
-
-void ProgramCounter::updateCounter() {
-    if (reset.read() == 1) {
-        count = 0;
-    } else if (load.read() == 1) {
-        count = counterIn.read();
-    } else if (enable.read() == 1) {
-        count = count + 1;
-    }
-    counterOut.write(count);
-}
 
 #endif
