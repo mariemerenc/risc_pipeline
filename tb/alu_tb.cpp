@@ -1,55 +1,73 @@
 #include <systemc.h>
-#include "alu.h"  
+#include "alu.h"
 
 SC_MODULE(alu_tb) {
-    sc_signal<sc_int<32>> operand1;
-    sc_signal<sc_int<32>> operand2;
+    sc_signal<sc_int<32>> operand1, operand2;
     sc_signal<sc_uint<4>> opcode;
     sc_signal<sc_int<32>> result;
-    sc_signal<bool> N;
-    sc_signal<bool> Z;
-    sc_clock clock;
+    sc_signal<bool>       N, Z;
 
     ALU* alu_inst;
+    sc_trace_file* tf;
 
     void apply_stimulus() {
-        operand1.write(10); operand2.write(5); opcode.write(1); wait(10, SC_NS);
-        cout << "[ADD] 10 + 5 = " << result.read() << ", Z = " << Z.read() << ", N = " << N.read() << endl;
+        tf = sc_create_vcd_trace_file("alu_waves");
+        tf->set_time_unit(1, SC_NS);
+        sc_trace(tf, operand1, "operand1");
+        sc_trace(tf, operand2, "operand2");
+        sc_trace(tf, opcode,   "opcode");
+        sc_trace(tf, result,   "result");
+        sc_trace(tf, N,        "flag_N");
+        sc_trace(tf, Z,        "flag_Z");
 
-        operand1.write(10); operand2.write(15); opcode.write(2); wait(10, SC_NS);
-        cout << "[SUB] 10 - 15 = " << result.read() << ", Z = " << Z.read() << ", N = " << N.read() << endl;
+        cout << "ALU testbench starting..." << endl;
 
-        operand1.write(0b1100); operand2.write(0b1010); opcode.write(3); wait(10, SC_NS);
-        cout << "[AND] 1100 & 1010 = " << result.read() << ", Z = " << Z.read() << ", N = " << N.read() << endl;
+        #define TEST(name, a, b, op)                              \
+            operand1.write(a); operand2.write(b); opcode.write(op); \
+            wait(1, SC_NS);                                        \
+            cout << "[" name "] "                                 \
+                 << (a) << "," << (b)                             \
+                 << " -> res=" << result.read()                   \
+                 << " Z=" << Z.read() << " N=" << N.read() << endl;
 
-        operand1.write(0b1100); operand2.write(0b1010); opcode.write(4); wait(10, SC_NS);
-        cout << "[OR] 1100 | 1010 = " << result.read() << ", Z = " << Z.read() << ", N = " << N.read() << endl;
+        // according to alu.cpp mapping:
+        // 1: AND, 2: OR, 3: XOR, 4: NOT (in1), 
+        // 5: ADD, 6: SUB, 7: CMP
 
-        operand1.write(5); operand2.write(-5); opcode.write(1); wait(10, SC_NS);
-        cout << "[ADD] 5 + (-5) = " << result.read() << ", Z = " << Z.read() << ", N = " << N.read() << endl;
+        TEST("AND",  0b1100, 0b1010, 1);
+        TEST("OR",   0b1100, 0b1010, 2);
+        TEST("XOR",  0b1100, 0b1010, 3);
+        TEST("NOT",  0b0011, 0,           4);
+        TEST("ADD",  10,    5,           5);
+        TEST("SUB",  10,   15,           6);
+        TEST("CMP (pos)", 7,  7,         7);
+        TEST("CMP (neg)", 5, 10,         7);
+        TEST("CMP (zero)", 3, 3,         7);
 
-        sc_stop(); // End simulation
+        #undef TEST
+
+        sc_close_vcd_trace_file(tf);
+        cout << "ALU testbench completed." << endl;
+        sc_stop();
     }
 
-    SC_CTOR(alu_tb) : clock("clock", 10, SC_NS) {
+    SC_CTOR(alu_tb) {
         alu_inst = new ALU("alu_instance");
-        alu_inst->in1(operand1);
-        alu_inst->in2(operand2);
-        alu_inst->op(opcode);
-        alu_inst->out(result);
-        alu_inst->N(N);
-        alu_inst->Z(Z);
+        alu_inst->in1(   operand1);
+        alu_inst->in2(   operand2);
+        alu_inst->op(    opcode);
+        alu_inst->out(   result);
+        alu_inst->N(     N);
+        alu_inst->Z(     Z);
 
         SC_THREAD(apply_stimulus);
     }
 
-    ~alu_tb() {
-        delete alu_inst;
-    }
+    ~alu_tb() { delete alu_inst; }
 };
 
 int sc_main(int argc, char* argv[]) {
-    alu_tb test("alu_testbench");
-    sc_start();
+    alu_tb tb("alu_testbench");
+    sc_start(); 
     return 0;
 }
