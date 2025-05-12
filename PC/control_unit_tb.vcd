@@ -1,0 +1,93 @@
+$date
+     May 12, 2025       19:44:01
+$end
+
+$version
+ SystemC 2.3.3-Accellera --- May 10 2025 16:26:38
+$end
+
+$timescale
+     1 ns
+$end
+
+$scope module SystemC $end
+$var wire    6  aaaaa  opcode [5:0]  $end
+$var wire    3  aaaab  aluOp [2:0]  $end
+$var wire    1  aaaac  aluSrc       $end
+$var wire    1  aaaad  regDst       $end
+$var wire    1  aaaae  regWrite       $end
+$var wire    1  aaaaf  memRead       $end
+$var wire    1  aaaag  memWrite       $end
+$var wire    1  aaaah  memToReg       $end
+$var wire    1  aaaai  branch       $end
+$upscope $end
+$enddefinitions  $end
+
+$comment
+All initial values are dumped below at time 0 sec = 0 timescale units.
+$end
+
+$dumpvars
+b0 aaaaa
+b0 aaaab
+0aaaac
+0aaaad
+0aaaae
+0aaaaf
+0aaaag
+0aaaah
+0aaaai
+$end
+
+#5
+b1 aaaaa
+b10 aaaab
+1aaaad
+1aaaae
+
+#10
+b10011 aaaaa
+b11 aaaab
+
+#15
+b100100 aaaaa
+b100 aaaab
+
+#20
+b110110 aaaaa
+b110 aaaab
+
+#25
+b101 aaaaa
+b0 aaaab
+
+#30
+b10000 aaaaa
+0aaaad
+0aaaae
+
+#35
+b10111 aaaaa
+
+#40
+b100001 aaaaa
+
+#45
+b110000 aaaaa
+
+#50
+b0 aaaaa
+
+#55
+b10000 aaaaa
+
+#60
+b100000 aaaaa
+
+#65
+b110000 aaaaa
+
+#70
+b111111 aaaaa
+
+#75
