@@ -3,15 +3,22 @@
 
 #include <systemc.h>
 
+/*
+    * Componente: Adder
+    * Descrição: Soma dois números de 32 bits.
+    * Em geral, usado tanto para incrementar o PC (PC+1 ou PC+4)
+    * quanto para calcular endereços de memória (base+offset)
+*/
+
 SC_MODULE(Adder) {
-    // Entradas
+    // entradas
     sc_in<sc_uint<32>> a{"a"};
     sc_in<sc_uint<32>> b{"b"};
 
-    // Saída
+    // saída
     sc_out<sc_uint<32>> sum{"sum"};
 
-    // Processo de soma
+    // processo de soma
     void do_add() {
         sum.write(a.read() + b.read());
     }
@@ -23,4 +30,4 @@ SC_MODULE(Adder) {
     }
 };
 
-#endif // ADDER_H
+#endif

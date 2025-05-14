@@ -1,6 +1,23 @@
 #include <systemc.h>
 #include "alu.h"
 
+/*
+    Testbench para a ALU (Unidade Lógica Aritmética)
+    Testa operações lógicas e aritméticas.
+    Gera um arquivo VCD para visualização de waveforms.
+    O arquivo VCD é gerado com o nome "alu_waves.vcd".
+    O testbench executa as seguintes operações:
+        1. AND
+        2. OR
+        3. XOR
+        4. NOT (in1)
+        5. ADD
+        6. SUB
+        7. CMP (com sinal)
+        8. CMP (negativo)
+        9. CMP (zero)
+*/
+
 SC_MODULE(alu_tb) {
     sc_signal<sc_int<32>> operand1, operand2;
     sc_signal<sc_uint<4>> opcode;
@@ -53,12 +70,12 @@ SC_MODULE(alu_tb) {
 
     SC_CTOR(alu_tb) {
         alu_inst = new ALU("alu_instance");
-        alu_inst->in1(   operand1);
-        alu_inst->in2(   operand2);
-        alu_inst->op(    opcode);
-        alu_inst->out(   result);
-        alu_inst->N(     N);
-        alu_inst->Z(     Z);
+        alu_inst->alu_in1(   operand1);
+        alu_inst->alu_in2(   operand2);
+        alu_inst->alu_op(    opcode);
+        alu_inst->alu_out(   result);
+        alu_inst->alu_N(     N);
+        alu_inst->alu_Z(     Z);
 
         SC_THREAD(apply_stimulus);
     }

@@ -1,0 +1,44 @@
+$date
+     May 12, 2025       19:28:31
+$end
+
+$version
+ SystemC 2.3.3-Accellera --- May 10 2025 16:26:38
+$end
+
+$timescale
+     1 ps
+$end
+
+$scope module SystemC $end
+$var wire   32  aaaaa  alu_result_in [31:0]  $end
+$var wire   32  aaaab  pc_branch_in [31:0]  $end
+$var wire   32  aaaac  reg_data2_in [31:0]  $end
+$var wire    5  aaaad  reg_dst_in [4:0]  $end
+$var wire    1  aaaae  zero_in       $end
+$var wire    1  aaaaf  reg_write_in       $end
+$var wire    1  aaaag  mem_read_in       $end
+$var wire    1  aaaah  mem_write_in       $end
+$var wire    1  aaaai  mem_to_reg_in       $end
+$var wire    1  aaaaj  branch_in       $end
+$upscope $end
+$enddefinitions  $end
+
+$comment
+All initial values are dumped below at time 0 sec = 0 timescale units.
+$end
+
+$dumpvars
+b1000000 aaaaa
+b10000000 aaaab
+b10010001101000101011001111000 aaaac
+b1010 aaaad
+0aaaae
+1aaaaf
+1aaaag
+0aaaah
+1aaaai
+0aaaaj
+$end
+
+#10000

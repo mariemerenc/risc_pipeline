@@ -3,23 +3,40 @@
 
 #include <systemc.h>
 
+/*
+    * Componente: Mux2x1
+    * Descrição: Multiplexor 2x1 para selecionar entre dois sinais de entrada.
+    * 
+    * Entradas:
+    * - mux_in1: primeiro sinal de entrada (32 bits)
+    * - mux_in2: segundo sinal de entrada (32 bits)
+    * - mux_sel: sinal de seleção (0 ou 1)
+    * 
+    * Saída:
+    * - mux_out: sinal de saída (32 bits)
+*/
+
 SC_MODULE(Mux2x1) {
-    sc_in<sc_uint<32>> in0{"in0"};
-    sc_in<sc_uint<32>> in1{"in1"};
-    sc_in<bool> sel{"sel"};
-    sc_out<sc_uint<32>> out{"out"};
+    //entrada
+    sc_in<sc_uint<32>> mux_in1{"in1"};
+    sc_in<sc_uint<32>> mux_in2{"in2"};
+    sc_in<bool> mux_sel{"sel"};
+
+    //saída
+    sc_out<sc_uint<32>> mux_out{"out"};
 
     void do_mux() {
-        if (sel.read() == 0) {
-            out.write(in0.read());
-        } else {
-            out.write(in1.read());
+        if(mux_sel.read() == 0){
+            mux_out.write(mux_in1.read());
+        }
+        else{
+            mux_out.write(mux_in2.read());
         }
     }
 
     SC_CTOR(Mux2x1) {
         SC_METHOD(do_mux);
-        sensitive << in0 << in1 << sel;
+        sensitive << mux_in1 << mux_in2 << mux_sel;
     }
 };
 

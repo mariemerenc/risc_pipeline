@@ -3,27 +3,50 @@
 
 #include <systemc.h>
 
-SC_MODULE(ProgramCounter) {
-    sc_in_clk clock{"clock"};                      
-    sc_in<bool> reset{"reset"};                    
-    sc_in<bool> load{"load"};                     
-    sc_in<bool> enable{"enable"};                  
+/*
+    * Componente: Program Counter (PC)
+    * Descrição: Contador de programa para controle de fluxo de execução.
+    * 
+    * Entradas:
+    * - clock: sinal de clock
+    * - pc_reset: sinal de reset (1 = reset, 0 = normal)
+    * - pc_load: sinal de load (1 = carrega valor de pc_in, 0 = não carrega)
+    * - pc_enable: sinal de enable (1 = incrementa o PC, 0 = não incrementa)
+    * - pc_in: valor a ser carregado no PC (8 bits)
+    * 
+    * Saída:
+    * - pc_out: valor atual do PC (8 bits)
+*/
 
-    sc_in<sc_uint<8>> pc_in{"pc_in"};            
+SC_MODULE(ProgramCounter) {
+    //entradas
+    sc_in_clk clock{"clock"};                      
+    sc_in<bool> pc_reset{"reset"};                    
+    sc_in<bool> pc_load{"load"};                     
+    sc_in<bool> pc_enable{"enable"};                  
+    sc_in<sc_uint<8>> pc_in{"pc_in"};
+
+    //saída
     sc_out<sc_uint<8>> pc_out{"pc_out"};            
 
+    //registrador interno
     sc_uint<8> pc_reg;
 
+    //processo de atualização do PC
     void update_pc(){
-        if(reset.read()){
+        // Reset: zera o PC
+        if(pc_reset.read()){
             pc_reg = 0;
         }
-        else if(load.read()){
+        // Load: carrega o valor de pc_in
+        else if(pc_load.read()){
             pc_reg = pc_in.read();
         }
-        else if(enable.read()){
+        // Incrementa o PC
+        else if(pc_enable.read()){
             pc_reg++;
         }
+        // Atualiza a saída
         pc_out.write(pc_reg);
     }
 

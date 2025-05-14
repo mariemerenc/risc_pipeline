@@ -1,6 +1,18 @@
 #include <systemc.h>
 #include "adder.h"
 
+/*
+    Testbench para o módulo Adder.
+    
+    Testa a soma de dois números de 32 bits.
+    Gera um arquivo VCD para visualização de waveforms.
+    O arquivo VCD é gerado com o nome "adder_wave.vcd".
+    O testbench executa três testes:
+        1. Soma de 10 e 15
+        2. Soma de 100 e 200
+        3. Soma de 0xFFFFFFFF e 1
+*/
+
 int sc_main(int argc, char* argv[]) {
     std::cout << "Starting ADDER testbench..." << std::endl;
 

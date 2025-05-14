@@ -1,0 +1,36 @@
+$date
+     May 14, 2025       06:28:13
+$end
+
+$version
+ SystemC 2.3.3-Accellera --- May 13 2025 13:35:09
+$end
+
+$timescale
+     1 ps
+$end
+
+$scope module SystemC $end
+$var wire   32  aaaaa  mux_in1 [31:0]  $end
+$var wire   32  aaaab  mux_in2 [31:0]  $end
+$var wire    1  aaaac  mux_sel       $end
+$var wire   32  aaaad  mux_out [31:0]  $end
+$upscope $end
+$enddefinitions  $end
+
+$comment
+All initial values are dumped below at time 0 sec = 0 timescale units.
+$end
+
+$dumpvars
+b1010 aaaaa
+b10100 aaaab
+0aaaac
+b1010 aaaad
+$end
+
+#1000
+1aaaac
+b10100 aaaad
+
+#2000

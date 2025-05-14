@@ -1,22 +1,34 @@
 #include <systemc.h>
 #include "sign_ext.h"
 
+/*
+    Testbench para o módulo SignExtend.
+    
+    Testa a extensão de sinal de um valor de 16 bits para 32 bits.
+    Gera um arquivo VCD para visualização de waveforms.
+    O arquivo VCD é gerado com o nome "sign_ext_wave.vcd".
+    O testbench executa os seguintes testes:
+        1. Valor positivo pequeno
+        2. Valor negativo simulado (bit 15 = 1)
+        3. Valor máximo de 16 bits
+*/
+
 int sc_main(int argc, char* argv[]) {
     sc_signal<sc_uint<32>> in_sig;
     sc_signal<sc_int<32>> out_sig;
 
     // Instanciando o módulo
     SignExtend sign_ext("SIGN_EXT");
-    sign_ext.in(in_sig);
-    sign_ext.out(out_sig);
+    sign_ext.sign_ext_in(in_sig);
+    sign_ext.sign_ext_out(out_sig);
 
     // Gerando VCD
     sc_trace_file* tf = sc_create_vcd_trace_file("sign_ext_wave");
     tf->set_time_unit(1, SC_PS); // 1ps de resolução
 
     // Sinais que serão rastreados
-    sc_trace(tf, in_sig, "in");
-    sc_trace(tf, out_sig, "out");
+    sc_trace(tf, in_sig, "sign_ext_in");
+    sc_trace(tf, out_sig, "sign_ext_out");
 
     std::cout << "Starting SIGN EXTEND testbench..." << std::endl;
 

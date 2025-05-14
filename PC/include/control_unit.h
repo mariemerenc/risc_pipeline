@@ -1,145 +1,148 @@
 #ifndef CONTROL_UNIT_H
 #define CONTROL_UNIT_H
 
-#include "systemc.h"
+#include <systemc.h>
+
+/*
+    * Componente: ControlUnit
+    * Descrição: Unidade de Controle para o processador.
+    * 
+    * Entradas:
+    * - opcode: código da operação (4 bits)
+    * - flagN: flag de negativo (1 bit)
+    * - flagZ: flag de zero (1 bit)
+    * 
+    * Saídas:
+    * - regWrite: habilita escrita no banco de registradores (1 bit)
+    * - memRead: habilita leitura da memória de dados (1 bit)
+    * - memWrite: habilita escrita na memória de dados (1 bit)
+    * - aluSrc: seleciona a fonte do segundo operando da ALU (0 = registrador, 1 = imediato ou offset) (1 bit)
+    * - memToReg: seleciona a fonte do dado a ser escrito no registrador (0 = ALU→WB, 1 = MEM→WB) (1 bit)
+    * - regDst: seleciona o destino do dado a ser escrito no registrador (0 = imediato, 1 = campo rd) (1 bit)
+    * - branch: habilita comparação de branch (1 bit)
+    * - jump: habilita salto incondicional (1 bit)
+    * - aluOp: operação a ser realizada pela ALU (4 bits)
+*/
+
+// Conjunto de instruções
+enum Opcodes : uint8_t {
+    OP_NOP = 0x0,
+    OP_AND = 0x1,
+    OP_OR  = 0x2,
+    OP_XOR = 0x3,
+    OP_NOT = 0x4,
+    OP_CMP = 0x7,
+    OP_ADD = 0x5,
+    OP_SUB = 0x6,
+    OP_LD  = 0x8,
+    OP_ST  = 0x9,
+    OP_J   = 0x10,
+    OP_JN  = 0x11,
+    OP_JZ  = 0x12
+};
 
 SC_MODULE(ControlUnit) {
-    // Entradas
-    sc_in<sc_uint<6>> opcode;
+    //entradas
+    sc_in<sc_uint<4>> opcode{"opcode"};  // 4 bits para as 12 instruções
+    sc_in<bool>       flagN{"flagN"};    // negativo
+    sc_in<bool>       flagZ{"flagZ"};    // zero
 
-    // Saídas
-    sc_out<sc_uint<3>> aluOp;
-    sc_out<bool> aluSrc;
-    sc_out<bool> regDst;
-    sc_out<bool> regWrite;
-    sc_out<bool> memRead;
-    sc_out<bool> memWrite;
-    sc_out<bool> memToReg;
-    sc_out<bool> branch;
+    //saídas de controle
+    sc_out<bool>        regWrite{"regWrite"}; // habilita escrita no banco de registradores
+    sc_out<bool>        memRead{"memRead"};   // leitura de memória de dados
+    sc_out<bool>        memWrite{"memWrite"}; // escrita em memória de dados
+    sc_out<bool>        aluSrc{"aluSrc"};     // 0 = registrador, 1 = imediato ou offset
+    sc_out<bool>        memToReg{"memToReg"}; // 0 = ALU→WB, 1 = MEM→WB
+    sc_out<bool>        regDst{"regDst"};     // 0 = destino imediato (LDI), 1 = campo rd
+    sc_out<bool>        branch{"branch"};     // habilita comparação de branch
+    sc_out<bool>        jump{"jump"};         // habilita salto incondicional
+    sc_out<sc_uint<4>>  aluOp{"aluOp"};       // operação p/ ALU (4 bits)
 
     void process() {
-        switch(opcode.read()) {
-            case 0x01: // AND
-                aluOp.write(2);
-                aluSrc.write(0);
-                regDst.write(1);
-                regWrite.write(1);
-                memRead.write(0);
-                memWrite.write(0);
-                memToReg.write(0);
-                branch.write(0);
+        // valores defaults (NOP)
+        regWrite.write(false);
+        memRead.write(false);
+        memWrite.write(false);
+        aluSrc.write(false);
+        memToReg.write(false);
+        regDst.write(false);
+        branch.write(false);
+        jump.write(false);
+        aluOp.write(OP_NOP);
+
+        switch (opcode.read()) {
+            case OP_AND:
+                aluOp.write(OP_AND);
+                regWrite.write(true);
                 break;
 
-            case 0x13: // OR
-                aluOp.write(3);
-                aluSrc.write(0);
-                regDst.write(1);
-                regWrite.write(1);
-                memRead.write(0);
-                memWrite.write(0);
-                memToReg.write(0);
-                branch.write(0);
+            case OP_OR:
+                aluOp.write(OP_OR);
+                regWrite.write(true);
                 break;
 
-            case 0x24: // XOR
-                aluOp.write(4);
-                aluSrc.write(0);
-                regDst.write(1);
-                regWrite.write(1);
-                memRead.write(0);
-                memWrite.write(0);
-                memToReg.write(0);
-                branch.write(0);
+            case OP_XOR:
+                aluOp.write(OP_XOR);
+                regWrite.write(true);
                 break;
 
-            case 0x36: // NOT
-                aluOp.write(6);
-                aluSrc.write(0);
-                regDst.write(1);
-                regWrite.write(1);
-                memRead.write(0);
-                memWrite.write(0);
-                memToReg.write(0);
-                branch.write(0);
+            case OP_NOT:
+                aluOp.write(OP_NOT);
+                regWrite.write(true);
                 break;
 
-            case 0x45: // CMP
-                aluOp.write(5);
-                aluSrc.write(0);
-                regDst.write(1);
-                regWrite.write(1);
-                memRead.write(0);
-                memWrite.write(0);
-                memToReg.write(0);
-                branch.write(0);
+            case OP_CMP:
+                aluOp.write(OP_CMP);
+                // CMP não escreve em registrador, só ajusta flags
                 break;
 
-            case 0x05: // ADD
-                aluOp.write(0);
-                aluSrc.write(0);
-                regDst.write(1);
-                regWrite.write(1);
-                memRead.write(0);
-                memWrite.write(0);
-                memToReg.write(0);
-                branch.write(0);
+            case OP_ADD:
+                aluOp.write(OP_ADD);
+                regWrite.write(true);
                 break;
 
-            case 0x57: // ADDI
-                aluOp.write(7);
-                aluSrc.write(1);
-                regDst.write(0);
-                regWrite.write(1);
-                memRead.write(0);
-                memWrite.write(0);
-                memToReg.write(0);
-                branch.write(0);
+            case OP_SUB:
+                aluOp.write(OP_SUB);
+                regWrite.write(true);
                 break;
 
-            case 0x61: // SUB
-                aluOp.write(1);
-                aluSrc.write(0);
-                regDst.write(1);
-                regWrite.write(1);
-                memRead.write(0);
-                memWrite.write(0);
-                memToReg.write(0);
-                branch.write(0);
+            case OP_LD:
+                aluOp.write(OP_ADD);      // calcula endereço: base + offset
+                aluSrc.write(true);       // usa immediate como segundo operando
+                memRead.write(true);
+                memToReg.write(true);     // escreve o dado da memória
+                regWrite.write(true);
                 break;
 
-            case 0x10: // não definido
-            case 0x17: // não definido
-            case 0x21: // não definido
-            case 0x30: // não definido
-            case 0x20: // não definido
-            case 0x3F: // não definido
-                aluOp.write(0);
-                aluSrc.write(0);
-                regDst.write(0);
-                regWrite.write(0);
-                memRead.write(0);
-                memWrite.write(0);
-                memToReg.write(0);
-                branch.write(0);
+            case OP_ST:
+                aluOp.write(OP_ADD);      // calcula endereço
+                aluSrc.write(true);
+                memWrite.write(true);
+                break;
+
+            case OP_J:
+                jump.write(true);
+                break;
+
+            case OP_JN:
+                if (flagN.read()) jump.write(true);
+                break;
+
+            case OP_JZ:
+                if (flagZ.read()) jump.write(true);
                 break;
 
             default:
-                aluOp.write(0);
-                aluSrc.write(0);
-                regDst.write(0);
-                regWrite.write(0);
-                memRead.write(0);
-                memWrite.write(0);
-                memToReg.write(0);
-                branch.write(0);
+                // NOP e instruções não definidas
                 break;
         }
     }
 
     SC_CTOR(ControlUnit) {
         SC_METHOD(process);
-        sensitive << opcode;
+        sensitive << opcode << flagN << flagZ;
+        std::cout << "New component - ControlUnit" << std::endl;
     }
 };
 
-#endif // CONTROL_UNIT_H
+#endif

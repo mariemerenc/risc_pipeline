@@ -1,98 +1,111 @@
 #include <systemc.h>
 #include "regbank.h"
 
+/*
+    Testbench para o módulo RegBank.
+    
+    Testa a leitura e escrita em registradores.
+    Gera um arquivo VCD para visualização de waveforms.
+    O arquivo VCD é gerado com o nome "regbank_waves.vcd".
+    O testbench executa os seguintes testes:
+        1. Escrita em R1 e R2
+        2. Leitura de R1 e R2
+        3. Escrita em R10
+        4. Leitura de R10 e R0
+*/
+
 int sc_main(int argc, char* argv[]) {
     // Instanciação do módulo
     RegBank regbank("RegBank");
 
     // Sinais
     sc_signal<bool> clock;
-    sc_signal<bool> enable;
-    sc_signal<bool> write;
-    sc_signal<sc_uint<5>> addressSource1;
-    sc_signal<sc_uint<5>> addressSource2;
-    sc_signal<sc_uint<5>> addressDest;
-    sc_signal<sc_int<32>> dataToWrite;
-    sc_signal<sc_int<32>> dataSource1;
-    sc_signal<sc_int<32>> dataSource2;
+    sc_signal<bool> regbank_enable;
+    sc_signal<bool> regbank_write;
+    sc_signal<sc_uint<5>> read_address1;
+    sc_signal<sc_uint<5>> read_address2;
+    sc_signal<sc_uint<5>> write_address;
+    sc_signal<sc_int<32>> write_data;
+    sc_signal<sc_int<32>> read_data1;
+    sc_signal<sc_int<32>> read_data2;
 
     // Conexão dos sinais
     regbank.clock(clock);
-    regbank.enable(enable);
-    regbank.write(write);
-    regbank.addressSource1(addressSource1);
-    regbank.addressSource2(addressSource2);
-    regbank.addressDest(addressDest);
-    regbank.dataToWrite(dataToWrite);
-    regbank.dataSource1(dataSource1);
-    regbank.dataSource2(dataSource2);
+    regbank.regbank_enable(regbank_enable);
+    regbank.regbank_write(regbank_write);
+    regbank.read_address1(read_address1);
+    regbank.read_address2(read_address2);
+    regbank.write_address(write_address);
+    regbank.write_data(write_data);
+    regbank.read_data1(read_data1);
+    regbank.read_data2(read_data2);
 
     // Geração do VCD
     sc_trace_file *wf = sc_create_vcd_trace_file("regbank_waves");
     sc_trace(wf, clock, "clock");
-    sc_trace(wf, enable, "enable");
-    sc_trace(wf, write, "write");
-    sc_trace(wf, addressSource1, "addressSource1");
-    sc_trace(wf, addressSource2, "addressSource2");
-    sc_trace(wf, addressDest, "addressDest");
-    sc_trace(wf, dataToWrite, "dataToWrite");
-    sc_trace(wf, dataSource1, "dataSource1");
-    sc_trace(wf, dataSource2, "dataSource2");
+    sc_trace(wf, regbank_enable, "regbank_enable");
+    sc_trace(wf, regbank_write, "regbank_write");
+    sc_trace(wf, read_address1, "read_address1");
+    sc_trace(wf, read_address2, "read_address2");
+    sc_trace(wf, write_address, "write_address");
+    sc_trace(wf, write_data, "write_data");
+    sc_trace(wf, read_data1, "read_data1");
+    sc_trace(wf, read_data2, "read_data2");
 
     // Inicialização
     clock = 0;
-    enable = 1;
-    write = 0;
-    addressSource1 = 0;
-    addressSource2 = 0;
-    addressDest = 0;
-    dataToWrite = 0;
+    regbank_enable = 1;
+    regbank_write = 0;
+    read_address1 = 0;
+    read_address2 = 0;
+    write_address = 0;
+    write_data = 0;
 
     std::cout << "Register Bank testbench starting..." << std::endl;
 
     // Escrita em R1 e R2
     std::cout << "\n>> Writing 100 in R1" << std::endl;
-    write = 1;
-    addressDest = 1;
-    dataToWrite = 100;
+    regbank_write = 1;
+    write_address = 1;
+    write_data = 100;
     clock = 1; sc_start(1, SC_NS);
     clock = 0; sc_start(1, SC_NS);
 
     std::cout << "\n>> Reading -55 from R2" << std::endl;
-    addressDest = 2;
-    dataToWrite = -55;
+    write_address = 2;
+    write_data = -55;
     clock = 1; sc_start(1, SC_NS);
     clock = 0; sc_start(1, SC_NS);
 
     // Leitura de R1 e R2
     std::cout << "\n>> Reading R1 and R2" << std::endl;
-    write = 0;
-    addressSource1 = 1;
-    addressSource2 = 2;
+    regbank_write = 0;
+    read_address1 = 1;
+    read_address2 = 2;
     clock = 1; sc_start(1, SC_NS);
     clock = 0; sc_start(1, SC_NS);
 
-    std::cout << "R1: " << dataSource1.read() << std::endl;
-    std::cout << "R2: " << dataSource2.read() << std::endl;
+    std::cout << "R1: " << read_data1.read() << std::endl;
+    std::cout << "R2: " << read_data2.read() << std::endl;
 
     // Escrita em R10
     std::cout << "\n>> Writing 777 in R10" << std::endl;
-    write = 1;
-    addressDest = 10;
-    dataToWrite = 777;
+    regbank_write = 1;
+    write_address = 10;
+    write_data = 777;
     clock = 1; sc_start(1, SC_NS);
     clock = 0; sc_start(1, SC_NS);
 
     // Leitura de R10
     std::cout << "\n>> Reading R10 and R0" << std::endl;
-    write = 0;
-    addressSource1 = 10;
-    addressSource2 = 0;
+    regbank_write = 0;
+    read_address1 = 10;
+    read_address2 = 0;
     clock = 1; sc_start(1, SC_NS);
     clock = 0; sc_start(1, SC_NS);
 
-    std::cout << "R10: " << dataSource1.read() << std::endl;
-    std::cout << "R0: " << dataSource2.read() << std::endl;
+    std::cout << "R10: " << read_data1.read() << std::endl;
+    std::cout << "R0: " << read_data2.read() << std::endl;
 
     std::cout << "\nRegister Bank testbench completed." << std::endl;
 
