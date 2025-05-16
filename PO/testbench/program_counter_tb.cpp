@@ -20,8 +20,8 @@ int sc_main(int argc, char* argv[]) {
     sc_signal<bool> pc_reset;
     sc_signal<bool> pc_enable;
     sc_signal<bool> pc_load;
-    sc_signal<sc_uint<8>> counterIn;
-    sc_signal<sc_uint<8>> counterOut;
+    sc_signal<sc_uint<32>> counterIn;
+    sc_signal<sc_uint<32>> counterOut;
 
     ProgramCounter pc("ProgramCounter");
     pc.clock(clock);
