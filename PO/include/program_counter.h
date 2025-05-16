@@ -12,10 +12,10 @@
     * - pc_reset: sinal de reset (1 = reset, 0 = normal)
     * - pc_load: sinal de load (1 = carrega valor de pc_in, 0 = não carrega)
     * - pc_enable: sinal de enable (1 = incrementa o PC, 0 = não incrementa)
-    * - pc_in: valor a ser carregado no PC (8 bits)
+    * - pc_in: valor a ser carregado no PC (32 bits)
     * 
     * Saída:
-    * - pc_out: valor atual do PC (8 bits)
+    * - pc_out: valor atual do PC (32 bits)
 */
 
 SC_MODULE(ProgramCounter) {
@@ -24,13 +24,13 @@ SC_MODULE(ProgramCounter) {
     sc_in<bool> pc_reset{"reset"};                    
     sc_in<bool> pc_load{"load"};                     
     sc_in<bool> pc_enable{"enable"};                  
-    sc_in<sc_uint<8>> pc_in{"pc_in"};
+    sc_in<sc_uint<32>> pc_in{"pc_in"};
 
     //saída
-    sc_out<sc_uint<8>> pc_out{"pc_out"};            
+    sc_out<sc_uint<32>> pc_out{"pc_out"};            
 
     //registrador interno
-    sc_uint<8> pc_reg;
+    sc_uint<32> pc_reg;
 
     //processo de atualização do PC
     void update_pc(){
