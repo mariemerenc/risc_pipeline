@@ -1,5 +1,5 @@
 $date
-     May 14, 2025       06:31:48
+     May 18, 2025       14:41:52
 $end
 
 $version
@@ -15,8 +15,8 @@ $var wire    1  aaaaa  clock       $end
 $var wire    1  aaaab  pc_reset       $end
 $var wire    1  aaaac  pc_enable       $end
 $var wire    1  aaaad  pc_load       $end
-$var wire    8  aaaae  pc_in [7:0]  $end
-$var wire    8  aaaaf  pc_out [7:0]  $end
+$var wire   32  aaaae  pc_in [31:0]  $end
+$var wire   32  aaaaf  pc_out [31:0]  $end
 $upscope $end
 $enddefinitions  $end
 

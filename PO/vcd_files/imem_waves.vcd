@@ -1,5 +1,5 @@
 $date
-     May 13, 2025       19:44:31
+     May 18, 2025       14:29:02
 $end
 
 $version
@@ -12,10 +12,10 @@ $end
 
 $scope module SystemC $end
 $var wire    1  aaaaa  clock       $end
-$var wire    1  aaaab  imem_enable       $end
-$var wire    1  aaaac  imem_write       $end
-$var wire   32  aaaad  imem_address [31:0]  $end
-$var wire   32  aaaae  imem_instruction [31:0]  $end
+$var wire    1  aaaab  enable       $end
+$var wire    1  aaaac  write       $end
+$var wire   32  aaaad  address [31:0]  $end
+$var wire   32  aaaae  instruction [31:0]  $end
 $upscope $end
 $enddefinitions  $end
 
@@ -26,9 +26,9 @@ $end
 $dumpvars
 1aaaaa
 1aaaab
-0aaaac
+1aaaac
 b0 aaaad
-b1000000000000 aaaae
+b1010000000000000 aaaae
 $end
 
 #5
@@ -37,7 +37,7 @@ $end
 #10
 1aaaaa
 b1 aaaad
-b1000000000001 aaaae
+b1010000000000001 aaaae
 
 #15
 0aaaaa
@@ -45,7 +45,7 @@ b1000000000001 aaaae
 #20
 1aaaaa
 b10 aaaad
-b1000000000010 aaaae
+b1010000000000010 aaaae
 
 #25
 0aaaaa
@@ -53,7 +53,7 @@ b1000000000010 aaaae
 #30
 1aaaaa
 b11 aaaad
-b1000000000011 aaaae
+b1010000000000011 aaaae
 
 #35
 0aaaaa
@@ -61,9 +61,59 @@ b1000000000011 aaaae
 #40
 1aaaaa
 b100 aaaad
-b1000000000100 aaaae
+b1010000000000100 aaaae
 
 #45
 0aaaaa
 
 #50
+1aaaaa
+0aaaac
+b0 aaaad
+b1010000000000000 aaaae
+
+#55
+0aaaaa
+
+#60
+1aaaaa
+b1 aaaad
+b1010000000000001 aaaae
+
+#65
+0aaaaa
+
+#70
+1aaaaa
+b10 aaaad
+b1010000000000010 aaaae
+
+#75
+0aaaaa
+
+#80
+1aaaaa
+b11 aaaad
+b1010000000000011 aaaae
+
+#85
+0aaaaa
+
+#90
+1aaaaa
+b100 aaaad
+b1010000000000100 aaaae
+
+#95
+0aaaaa
+
+#100
+1aaaaa
+0aaaab
+b10 aaaad
+b0 aaaae
+
+#105
+0aaaaa
+
+#110
