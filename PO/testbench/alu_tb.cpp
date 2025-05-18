@@ -57,7 +57,7 @@ SC_MODULE(alu_tb) {
         TEST("NOT",  0b0011, 0,           4);
         TEST("ADD",  10,    5,           5);
         TEST("SUB",  10,   15,           6);
-        TEST("CMP (pos)", 7,  7,         7);
+        TEST("CMP (pos)", 8,  7,         7);
         TEST("CMP (neg)", 5, 10,         7);
         TEST("CMP (zero)", 3, 3,         7);
 
