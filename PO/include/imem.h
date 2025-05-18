@@ -34,8 +34,19 @@ SC_MODULE(IMEM){
 
     //processo principal
     void process(){
-        imem_instruction.write(imem[imem_address.read()]);
+    if (imem_enable.read()) {
+        if(imem_write.read()){
+            imem[imem_address.read()] = imem_instruction.read();  // Escrita
+        }
+        else{
+            imem_instruction.write(imem[imem_address.read()]);    // Leitura
+        }
     }
+    else{
+        imem_instruction.write(0); // Sem acesso, saída zerada
+    }
+}
+
 
     SC_CTOR(IMEM){
         std::cout << "New component - IMEM" << std::endl;
