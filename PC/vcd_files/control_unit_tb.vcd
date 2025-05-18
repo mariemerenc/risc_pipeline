@@ -1,5 +1,5 @@
 $date
-     May 14, 2025       18:46:45
+     May 18, 2025       11:43:12
 $end
 
 $version
@@ -86,23 +86,20 @@ b1001 aaaaa
 0aaaah
 
 #9000
-b0 aaaaa
+b1010 aaaaa
 0aaaaf
 0aaaag
+1aaaak
 b0 aaaal
 
 #10000
-b1 aaaaa
-1aaaad
-b1 aaaal
+b1011 aaaaa
 
 #11000
-b10 aaaaa
-b10 aaaal
+b1100 aaaaa
 
 #12000
 b1111 aaaaa
-0aaaad
-b0 aaaal
+0aaaak
 
 #13000
