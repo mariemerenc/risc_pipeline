@@ -36,9 +36,9 @@ enum Opcodes : uint8_t {
     OP_SUB = 0x6,
     OP_LD  = 0x8,
     OP_ST  = 0x9,
-    OP_J   = 0x10,
-    OP_JN  = 0x11,
-    OP_JZ  = 0x12
+    OP_J   = 0xA,
+    OP_JN  = 0xB,
+    OP_JZ  = 0xC
 };
 
 SC_MODULE(ControlUnit) {
