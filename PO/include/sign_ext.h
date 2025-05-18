@@ -16,7 +16,7 @@
 
 SC_MODULE(SignExtend) {
     // entrada de 32 bits, mas consideraremos apenas os 16 bits menos significativos
-    sc_in<sc_uint<32>> sign_ext_in{"sign_ext_in"};
+    sc_in<sc_int<32>> sign_ext_in{"sign_ext_in"};
 
     // saída com extensão de sinal (signed 32 bits)
     sc_out<sc_int<32>> sign_ext_out{"sign_ext_out"};
@@ -29,6 +29,7 @@ SC_MODULE(SignExtend) {
     }
 
     SC_CTOR(SignExtend){
+        std::cout << "New component - SignExt" << std::endl;
         SC_METHOD(process);
         sensitive << sign_ext_in;
     }

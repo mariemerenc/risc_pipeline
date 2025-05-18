@@ -25,7 +25,7 @@ SC_MODULE(DMEM) {
     sc_in<bool> clock{"clock"};             
     sc_in<bool> dmem_enable{"dmem_enable"};           
     sc_in<bool> dmem_write{"dmem_write"};             
-    sc_in<sc_uint<32>> dmem_address{"dmem_address"};  
+    sc_in<sc_int<32>> dmem_address{"dmem_address"};  
     sc_in<sc_int<32>> dmem_dataIn{"dmem_dataIn"};     
 
     //saída

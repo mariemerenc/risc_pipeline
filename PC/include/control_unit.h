@@ -56,7 +56,7 @@ SC_MODULE(ControlUnit) {
     sc_out<bool>        regDst{"regDst"};     // 0 = destino imediato (LDI), 1 = campo rd
     sc_out<bool>        branch{"branch"};     // habilita comparação de branch
     sc_out<bool>        jump{"jump"};         // habilita salto incondicional
-    sc_out<sc_uint<4>>  aluOp{"aluOp"};       // operação p/ ALU (4 bits)
+    sc_out<sc_int<4>>  aluOp{"aluOp"};       // operação p/ ALU (4 bits)
 
     void process() {
         // valores defaults (NOP)

@@ -24,28 +24,28 @@ SC_MODULE(IMEM){
     sc_in<bool> clock{"clock"};
     sc_in<bool> imem_enable{"enable"};
     sc_in<bool> imem_write{"write"};
-    sc_in<sc_uint<32>> imem_address{"address"};
+    sc_in<sc_int<32>> imem_address{"address"};
 
     //saída
-    sc_out<sc_uint<32>> imem_instruction{"instruction"};
+    sc_out<sc_int<32>> imem_instruction{"instruction"};
 
     //memória de instruções
-    sc_uint<32> imem[IMEM_SIZE];
+    sc_int<32> imem[IMEM_SIZE];
 
     //processo principal
     void process(){
-    if (imem_enable.read()) {
-        if(imem_write.read()){
-            imem[imem_address.read()] = imem_instruction.read();  // Escrita
+        if (imem_enable.read()){
+            if(imem_write.read()){
+                imem[imem_address.read()] = imem_instruction.read();  // Escrita
+            }
+            else{
+                imem_instruction.write(imem[imem_address.read()]);    // Leitura
+            }
         }
         else{
-            imem_instruction.write(imem[imem_address.read()]);    // Leitura
+            imem_instruction.write(0); // Sem acesso, saída zerada
         }
     }
-    else{
-        imem_instruction.write(0); // Sem acesso, saída zerada
-    }
-}
 
 
     SC_CTOR(IMEM){

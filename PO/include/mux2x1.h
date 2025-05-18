@@ -18,12 +18,12 @@
 
 SC_MODULE(Mux2x1) {
     //entrada
-    sc_in<sc_uint<32>> mux_in1{"in1"};
-    sc_in<sc_uint<32>> mux_in2{"in2"};
+    sc_in<sc_int<32>> mux_in1{"in1"};
+    sc_in<sc_int<32>> mux_in2{"in2"};
     sc_in<bool> mux_sel{"sel"};
 
     //saída
-    sc_out<sc_uint<32>> mux_out{"out"};
+    sc_out<sc_int<32>> mux_out{"out"};
 
     void do_mux() {
         if(mux_sel.read() == 0){
@@ -35,6 +35,7 @@ SC_MODULE(Mux2x1) {
     }
 
     SC_CTOR(Mux2x1) {
+        std::cout << "New component - MUX 2x1" << std::endl;
         SC_METHOD(do_mux);
         sensitive << mux_in1 << mux_in2 << mux_sel;
     }

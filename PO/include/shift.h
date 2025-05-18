@@ -18,12 +18,12 @@
 
 SC_MODULE(Shift) {
     // entradas
-    sc_in<sc_uint<32>> shift_in{"shift_in"};                 // valor a ser deslocado
-    sc_in<sc_uint<5>> shift_amount{"shift_amount"}; // quantidade de deslocamento (0–31)
+    sc_in<sc_int<32>> shift_in{"shift_in"};                 // valor a ser deslocado
+    sc_in<sc_int<5>> shift_amount{"shift_amount"}; // quantidade de deslocamento (0–31)
     sc_in<bool> shift_dir{"shift_dir"};          // direção: 0 = esquerda, 1 = direita
 
     // saída
-    sc_out<sc_uint<32>> shift_out{"out"};
+    sc_out<sc_int<32>> shift_out{"out"};
 
     // processo de deslocamento
     void process() {
@@ -36,7 +36,7 @@ SC_MODULE(Shift) {
     }
 
     SC_CTOR(Shift) {
-        std::cout << "New component - SHIFT" << std::endl;
+        std::cout << "New component - Shift" << std::endl;
         SC_METHOD(process);
         sensitive << shift_in << shift_amount << shift_dir;
     }

@@ -24,7 +24,7 @@
 
 SC_MODULE(ALU) {
     sc_in<sc_int<32>> alu_in1{"alu_in1"}, alu_in2{"alu_in2"};
-    sc_in<sc_uint<4>> alu_op{"alu_op"};
+    sc_in<sc_int<4>> alu_op{"alu_op"};
     sc_out<sc_int<32>> alu_out{"alu_out"};
     sc_out<bool> alu_Z{"alu_Z"}, alu_N{"alu_N"};
 

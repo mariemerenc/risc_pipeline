@@ -26,9 +26,9 @@ SC_MODULE(RegBank){
     sc_in<bool> clock{"clock"};
     sc_in<bool> regbank_enable{"regbankenable"};
     sc_in<bool> regbank_write{"regbank_write"};
-    sc_in<sc_uint<5>> read_address1{"read_address1"}; 
-    sc_in<sc_uint<5>> read_address2{"read_address2"}; 
-    sc_in<sc_uint<5>> write_address{"write_address"}; 
+    sc_in<sc_int<5>> read_address1{"read_address1"}; 
+    sc_in<sc_int<5>> read_address2{"read_address2"}; 
+    sc_in<sc_int<5>> write_address{"write_address"}; 
     sc_in<sc_int<32>> write_data{"write_data"}; 
 
     //outputs

@@ -12,11 +12,11 @@
 
 SC_MODULE(Adder) {
     // entradas
-    sc_in<sc_uint<32>> a{"a"};
-    sc_in<sc_uint<32>> b{"b"};
+    sc_in<sc_int<32>> a{"a"};
+    sc_in<sc_int<32>> b{"b"};
 
     // saída
-    sc_out<sc_uint<32>> sum{"sum"};
+    sc_out<sc_int<32>> sum{"sum"};
 
     // processo de soma
     void do_add() {
@@ -24,7 +24,7 @@ SC_MODULE(Adder) {
     }
 
     SC_CTOR(Adder) {
-        std::cout << "New component - ADDER" << std::endl;
+        std::cout << "New component - Adder" << std::endl;
         SC_METHOD(do_add);
         sensitive << a << b;
     }
